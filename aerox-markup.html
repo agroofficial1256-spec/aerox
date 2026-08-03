@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEROX — Paper airplane simulation web game Beta v2</title>
+<link rel="stylesheet" href="aerox-styles.css">
+<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+</head>
+<body>
+<!-- ASSET LOADING SCREEN -->
+<div id="loadingScreen">
+  <div class="panel">
+    <h2>Loading Assets 🛠...</h2>
+    <div class="progress-track" style="margin: 20px 0 4px;" role="progressbar" aria-label="Preparing the game world" aria-valuemin="0" aria-valuemax="100">
+	<div class="progress-fill" id="loadFill" style="width:0%;"></div></div>
+  </div>
+</div>
+<div id="overlay" class="hide">
+  <div class="panel">
+    <h1>AEROX ✈</h1>
+
+    <div id="greeting">Welcome, Pilot !</div>
+
+   <div class="dashboard-stats">
+      <div class="stat-item">
+        <div class="stat-val" id="dashBest">0m</div>
+        <div class="stat-lbl">Best Distance</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="dashLast">0m</div>
+        <div class="stat-lbl">Last Flight</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="dashFlights">0</div>
+        <div class="stat-lbl">Total Flights</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="dashUnlocked">1 / 3</div>
+        <div class="stat-lbl">Colors Unlocked</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="dashGarden">0</div>
+        <div class="stat-lbl">Sunflowers Grown</div>
+      </div>
+    </div>
+
+    <div id="unlockProgressWrap">
+      <div id="unlockProgressLabel">All Gradients unlocked!</div>
+      <div class="progress-track"><div class="progress-fill" id="unlockProgressFill" style="width:0%;"></div></div>
+    </div>
+
+    <div class="section-title">Select Airplane Color</div>
+    <div id="lockMsg"></div>
+    <div class="custom-grid" id="colorPickerGrid">
+      <div class="color-btn selected" data-color="white">Classic White</div>
+      <div class="color-btn locked" data-color="sunset" id="btnSunset">Sunset Gradient (1,000m)</div>
+      <div class="color-btn locked" data-color="aurora" id="btnAurora">Aurora Gradient (5,000m)</div>
+    </div>
+
+    <div class="section-title">Manual 📜</div>
+    <p>• <strong>Controls ~</strong> W/A/S/D Or Arrow keys. Press <strong>G</strong> to perform a smooth 360° rotation mid-air.</p>
+    <p>• <strong>Moisture Gradient ~</strong> Maximum flight altitude is capped at <I>35 m</I>.</p>
+    <p>• <strong>Wind System ~</strong> Wind shifts once mid-ride. Steer with the wind for boosts!</p>
+    <p>• <strong>Poetry in Motion ~</strong> Fly close to nature to illuminate your surroundings.</p>
+	  <p><u>PAPER AIRPLANE HAS SEEDS WITHIN IT SO WHEN IT CRASHES SUNFLOWER BLOOMS</u></p>
+	  <P><U>PAPER AIRPLANE TRANSFORMS TO PAPER BOAT IN PONDS</U></P>
+    
+    <div class="keys">
+      <div class="key">W</div><div class="key">A</div><div class="key">S</div><div class="key">D</div>
+      <div class="key">G</div><div class="key">↑</div><div class="key">←</div><div class="key">↓</div><div class="key">→</div>
+    </div>
+
+    <button id="startBtn">Take Off</button>
+  </div>
+</div>
+
+<div id="crashScreen">
+  <div class="panel" style="text-align:center;">
+    <h2>THE FIELD REMEMBERS</h2>
+    <p id="finalDistance">You flew 0 meters.</p>
+    <button id="retryBtn">Fly again ▶</button>
+    <button id="dashboardBtn" class="btn-secondary">Dashboard ↩</button>
+  </div>
+</div>
+
+<div id="hud">
+  <div id="topbar">
+    <div id="logo">AEROX ©</div>
+    <div style="display:flex; flex-direction:column; align-items:flex-end;">
+      <button id="audioBtn" title="Audio Toggles">⚙ Audio</button>
+      <div id="audioControls">
+        <div class="audio-row">Guide <button id="toggleGuide" class="audio-btn-toggle active">ON</button></div>
+        <div class="audio-row">Music <button id="toggleMusic" class="audio-btn-toggle active">ON</button></div>
+      </div>
+    </div>
+    <div id="score">
+      <div id="distance">0<span>m</span></div>
+      <div id="zone">Altitude: <span id="altMeter">5.0</span>m</div>
+    </div>
+  </div>
+  <div id="status"></div>
+  
+  <div id="windBox">
+    <div id="windTitle">WIND</div>
+    <div id="windArrow">↑</div>
+    <div id="windSpeed">0 km/h</div>
+  </div>
+</div>
+<script src="aerox-logics.js" defer></script>
+</body>
+</html>

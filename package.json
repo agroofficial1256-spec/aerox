@@ -1,0 +1,11 @@
+{
+  "name": "aerox-v1",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@netlify/database": "latest",
+    "drizzle-kit": "beta",
+    "drizzle-orm": "beta"
+  }
+}
