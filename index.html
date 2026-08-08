@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEROX — Unfold the Sky | 3D Paper Airplane Flight Simulator</title>
+<meta name="description" content="AEROX is a serene 3D paper airplane flight simulation web game. Fly through scenic landscapes, ride dynamic wind currents, morph into paper boats over ponds, and plant sunflowers with every crash.">
+<meta name="keywords" content="AEROX, paper airplane game, 3D web game, WebGL flight simulator, Three.js game, browser game, sunflower garden, paper boat simulator">
+<meta name="author" content="AEROX Team">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="theme-color" content="#121c27">
+
+<!-- Canonical & Web Manifest -->
+<link rel="canonical" href="https://aerox-v1.netlify.app/">
+<link rel="manifest" href="site.webmanifest">
+
+<!-- Open Graph / Facebook / LinkedIn (SEO) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://aerox-v1.netlify.app/">
+<meta property="og:site_name" content="AEROX">
+<meta property="og:title" content="AEROX — Unfold the Sky | 3D Paper Airplane Simulator">
+<meta property="og:description" content="Fly serene 3D paper airplanes, ride dynamic wind currents, morph into paper boats over ponds, and plant sunflowers with every crash.">
+<meta property="og:image" content="https://aerox-v1.netlify.app/aerox-hero-banner.jpg">
+<meta property="og:image:alt" content="AEROX 3D Paper Airplane flying over golden sunflower fields and blue ponds">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter Card Metadata (SEO) -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://aerox-v1.netlify.app/">
+<meta name="twitter:title" content="AEROX — Unfold the Sky">
+<meta name="twitter:description" content="Serene 3D WebGL paper airplane flight simulator. Ride wind currents, sail paper boats, and grow sunflower fields.">
+<meta name="twitter:image" content="https://aerox-v1.netlify.app/aerox-hero-banner.jpg">
+
+<!-- JSON-LD Structured Data (SEO & AEO Engine Indexing) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://aerox-v1.netlify.app/#game",
+      "name": "AEROX",
+      "alternateName": "AEROX 3D Paper Airplane Simulator",
+      "url": "https://aerox-v1.netlify.app/",
+      "image": "https://aerox-v1.netlify.app/aerox-hero-banner.jpg",
+      "applicationCategory": "GameApplication",
+      "genre": "SimulationGame",
+      "operatingSystem": "Any (Web Browser)",
+      "browserRequirements": "Requires WebGL support",
+      "description": "A serene 3D paper airplane flight simulator built with WebGL and Three.js featuring dynamic wind currents, paper-to-boat water transformations, and a persistent sunflower crash garden.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "featureList": [
+        "WebGL 3D Aerodynamics Physics",
+        "Persistent Global Sunflower Crash Garden",
+        "Dual Paper Airplane to Paper Boat Morphing",
+        "Dynamic Shifting Wind Currents",
+        "Unlockable Gradient Aircraft Skins"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://aerox-v1.netlify.app/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is AEROX?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "AEROX is a free, web-based 3D paper airplane flight simulator created with WebGL and Three.js. Players navigate a handcrafted paper airplane over procedural landscapes, steer through shifting wind currents, and plant sunflowers with every crash."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the Sunflower Crash Garden work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Paper airplanes in AEROX carry wildflower seeds inside their paper folds. When an airplane crashes into the terrain, a blooming sunflower monument is planted at the exact coordinates and remembered in the global garden."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do paper airplanes transform into paper boats?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "When flying low over water bodies or ponds (altitude under 1 meter), your paper airplane automatically morphs into a floating paper boat that can sail across the water surface or launch back into the air."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the flight controls and altitude caps in AEROX?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Flight altitude is capped at 35 meters due to the atmospheric moisture gradient. Controls include W or Down Arrow (dive/pitch down), S or Up Arrow (climb/pitch up), A/D or Left/Right Arrows (bank left/right), and G (perform a 360-degree barrel roll)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is AEROX free to play and does it require downloads or signups?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "AEROX is 100% free to play directly in any modern web browser. It requires zero signups, account creation, or software downloads."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Stylesheets -->
+<link rel="stylesheet" href="landing-styles.css">
+<link rel="stylesheet" href="aerox-styles.css">
+
+<!-- Three.js CDN -->
+<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+</head>
+<body>
+
+<!-- ACCESSIBILITY SKIP LINK (AX) -->
+<a href="#mainContent" class="skip-link">Skip to main content</a>
+
+<!-- LANDING PAGE VIEW -->
+<div id="landingView">
+  <!-- NAVIGATION (AX & SEO) -->
+  <nav class="navbar" role="navigation" aria-label="Main Navigation">
+    <div class="container nav-wrap">
+      <a href="#" class="brand-logo" id="navLogo" aria-label="AEROX Home Page">
+        AEROX <span>✈</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#skins">Skins</a></li>
+        <li><a href="#controls">Controls</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-nav-play" id="heroPlayBtnNav" aria-label="Play AEROX Game Now">Play Now ▶</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN LANDMARK (AX) -->
+  <main id="mainContent" role="main">
+    <!-- HERO SECTION -->
+    <section class="hero-section" aria-labelledby="heroHeadline">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span>🌱 Living Paper World</span>
+          </div>
+          <h1 class="hero-title" id="heroHeadline">
+            Unfold the Sky.<br>
+            <span class="hero-title-highlight"><span class="gradient-text">Fly. Drift. Bloom.</span></span>
+          </h1>
+          <p class="hero-description">
+            A serene 3D paper airplane flight simulator. Master shifting winds, glide low over ponds to transform into a paper boat, and leave behind a blooming sunflower field wherever you crash.
+          </p>
+          
+          <div class="hero-ctas">
+            <button class="btn-primary-hero" id="heroPlayBtn" aria-label="Take Off and Start Flight Simulator">Take Off Now ▶</button>
+            <a href="#controls" class="btn-secondary-hero" aria-label="View Flight Manual Controls">Flight Manual 📜</a>
+          </div>
+
+          <div class="hero-features-list">
+            <span><i aria-hidden="true">✓</i> Instant WebGL</span>
+            <span><i aria-hidden="true">✓</i> No Signups</span>
+            <span><i aria-hidden="true">✓</i> 100% Free</span>
+          </div>
+        </div>
+
+        <!-- HERO BANNER IMAGE CARD -->
+        <div class="hero-media-wrap">
+          <div class="hero-banner-card">
+            <img src="aerox-hero-banner.jpg" alt="3D Paper Airplane soaring over vibrant sunflower fields and blue ponds in AEROX" class="hero-banner-img" id="heroBannerImg" width="1366" height="768" loading="eager">
+            <div class="hero-card-overlay">
+              <div class="live-pill">
+                <span class="live-dot" aria-hidden="true"></span>
+                <span>Sunflower Garden Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS BANNER -->
+    <section class="container" aria-label="Key Game Performance Metrics">
+      <div class="stats-banner">
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-number">35m</div>
+            <div class="stat-label">Altitude Limit</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">5,000m+</div>
+            <div class="stat-label">Distance Milestone</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Physics Driven</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Unlockable Skins</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section class="features-section" id="features" aria-labelledby="featuresHeadline">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Game Mechanics</span>
+          <h2 class="section-title" id="featuresHeadline">Poetry in Motion</h2>
+          <p class="section-subtitle">
+            Experience responsive aerodynamics combined with a living environment that reacts to your flight path.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <article class="feature-card">
+            <div>
+              <div class="feature-icon-wrap" aria-hidden="true">🌱</div>
+              <h3>Sunflower Crash Garden</h3>
+              <p>Paper airplanes carry wildflower seeds. Whenever you crash, a sunflower sprouts and remembers your flight coordinates in the global garden.</p>
+            </div>
+            <span class="feature-tag">Persistent World</span>
+          </article>
+
+          <article class="feature-card">
+            <div>
+              <div class="feature-icon-wrap" aria-hidden="true">⛵</div>
+              <h3>Paper Boat Transformation</h3>
+              <p>Gliding low over ponds automatically transforms your paper plane into a floating paper boat. Sail away or press UP to take off again!</p>
+            </div>
+            <span class="feature-tag">Dual Dynamics</span>
+          </article>
+
+          <article class="feature-card">
+            <div>
+              <div class="feature-icon-wrap" aria-hidden="true">🌬️</div>
+              <h3>Dynamic Wind System</h3>
+              <p>Wind direction shifts mid-flight. Align your flight vector with wind currents for velocity boosts and smooth mid-air maneuvers.</p>
+            </div>
+            <span class="feature-tag">Aero Physics</span>
+          </article>
+
+          <article class="feature-card">
+            <div>
+              <div class="feature-icon-wrap" aria-hidden="true">🎨</div>
+              <h3>Gradient Skin Unlocks</h3>
+              <p>Push your distance records to unlock vibrant Sunset and Aurora gradients. Customize your plane before taking to the skies.</p>
+            </div>
+            <span class="feature-tag">Progression</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKINS GALLERY -->
+    <section class="skins-section" id="skins" aria-labelledby="skinsHeadline">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Customization</span>
+          <h2 class="section-title" id="skinsHeadline">Select Your Wings</h2>
+          <p class="section-subtitle">
+            Fly long distances to unlock gradient paper textures.
+          </p>
+        </div>
+
+        <div class="skins-grid">
+          <div class="skin-card">
+            <div class="skin-preview-box" data-skin="white">
+              <svg class="skin-plane-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Classic White Paper Airplane">
+                <path d="M50 10L90 85L50 70L10 85L50 10Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+                <path d="M50 10L50 70" stroke="#94a3b8" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3 class="skin-title">Classic White</h3>
+            <span class="skin-unlock">Default Unlocked</span>
+          </div>
+
+          <div class="skin-card">
+            <div class="skin-preview-box" data-skin="sunset">
+              <svg class="skin-plane-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sunset Gradient Paper Airplane">
+                <path d="M50 10L90 85L50 70L10 85L50 10Z" fill="url(#sunsetGrad)" stroke="#ff9a1f" stroke-width="2"/>
+                <path d="M50 10L50 70" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+                <defs>
+                  <linearGradient id="sunsetGrad" x1="10" y1="10" x2="90" y2="85" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#e8380d"/>
+                    <stop offset="1" stop-color="#ff9a1f"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <h3 class="skin-title">Sunset Gradient</h3>
+            <span class="skin-unlock">Unlock at 1,000m</span>
+          </div>
+
+          <div class="skin-card">
+            <div class="skin-preview-box" data-skin="aurora">
+              <svg class="skin-plane-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aurora Gradient Paper Airplane">
+                <path d="M50 10L90 85L50 70L10 85L50 10Z" fill="url(#auroraGrad)" stroke="#12575c" stroke-width="2"/>
+                <path d="M50 10L50 70" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+                <defs>
+                  <linearGradient id="auroraGrad" x1="10" y1="10" x2="90" y2="85" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#0d3b2e"/>
+                    <stop offset="0.5" stop-color="#12575c"/>
+                    <stop offset="1" stop-color="#2e1065"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <h3 class="skin-title">Aurora Gradient</h3>
+            <span class="skin-unlock">Unlock at 5,000m</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTROLS SECTION -->
+    <section class="controls-section" id="controls" aria-labelledby="controlsHeadline">
+      <div class="container">
+        <div class="controls-card">
+          <div class="controls-info">
+            <h2 id="controlsHeadline" style="font-family:'Outfit',sans-serif; font-size:32px; font-weight:900; margin-bottom:16px; color:#1b2820;">Flight Manual 📜</h2>
+            <p>
+              Take off from the dashboard, maintain pitch balance, and monitor your moisture altitude gauge. Don't breach the 35m ceiling!
+            </p>
+            <button class="btn-primary-hero" id="cardPlayBtn" aria-label="Launch WebGL Game Session">Launch Game ▶</button>
+          </div>
+
+          <div class="keybind-grid" aria-label="Keyboard Controls Guide">
+            <div class="keybind-item">
+              <div class="kbd-badge">W / ↑</div>
+              <div class="keybind-label">Pitch Down / Dive</div>
+            </div>
+            <div class="keybind-item">
+              <div class="kbd-badge">S / ↓</div>
+              <div class="keybind-label">Pitch Up / Climb</div>
+            </div>
+            <div class="keybind-item">
+              <div class="kbd-badge">A / ←</div>
+              <div class="keybind-label">Bank Left</div>
+            </div>
+            <div class="keybind-item">
+              <div class="kbd-badge">D / →</div>
+              <div class="keybind-label">Bank Right</div>
+            </div>
+            <div class="keybind-item" style="grid-column: span 2;">
+              <div class="kbd-badge">G</div>
+              <div class="keybind-label">Perform 360° Barrel Roll</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AEO KNOWLEDGE BASE / FAQ SECTION -->
+    <section class="faq-section" id="faq" aria-labelledby="faqHeadline">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Knowledge Base</span>
+          <h2 class="section-title" id="faqHeadline">Frequently Asked Questions</h2>
+          <p class="section-subtitle">
+            Everything you need to know about AEROX mechanics and flight controls.
+          </p>
+        </div>
+
+        <div class="faq-grid">
+          <article class="faq-card">
+            <h3>🌱 What is the Sunflower Crash Garden?</h3>
+            <p>Every paper airplane carries wildflower seeds inside its paper folds. When your plane crashes into the ground, a sunflower monument blooms at the exact flight coordinates and is remembered in the global garden.</p>
+          </article>
+
+          <article class="faq-card">
+            <h3>⛵ How do paper airplanes morph into paper boats?</h3>
+            <p>When gliding low over water bodies or ponds (altitude below 1 meter), your paper airplane automatically transforms into a floating paper boat that can sail across the water surface.</p>
+          </article>
+
+          <article class="faq-card">
+            <h3>🌬️ How do dynamic wind currents work?</h3>
+            <p>Wind direction shifts mid-flight. Aligning your airplane's vector with the wind gives you a velocity boost, while steering against the wind increases drag and turbulence.</p>
+          </article>
+
+          <article class="faq-card">
+            <h3>🔒 How do I unlock new plane skins?</h3>
+            <p>Flight achievements unlock new plane gradients. Reaching 1,000 meters unlocks the Sunset Gradient, while reaching 5,000 meters unlocks the Aurora Gradient.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER (AX & SEO) -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-brand">AEROX ©</div>
+      <p class="footer-quote">"A paper plane, a field, a little courage."</p>
+      <p style="font-size:12px; opacity:0.5;">Built with WebGL & Three.js • No downloads or signups required.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- GAME CONTAINER MODAL -->
+<div id="gameContainerModal" role="dialog" aria-modal="true" aria-label="AEROX 3D Flight Game Viewport">
+  <div class="game-modal-header">
+    <button class="btn-exit-game" id="exitGameBtn" aria-label="Exit Game and Return to Landing Page">🏠 Landing Page</button>
+  </div>
+
+  <!-- ASSET LOADING SCREEN -->
+  <div id="loadingScreen">
+    <div class="panel">
+      <h2>Loading Assets 🛠...</h2>
+      <div class="progress-track" style="margin: 20px 0 4px;" role="progressbar" aria-label="Preparing the game world" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-fill" id="loadFill" style="width:0%;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD OVERLAY -->
+  <div id="overlay" class="hide">
+    <div class="panel">
+      <h1>AEROX ✈</h1>
+      <div id="greeting">Welcome, Pilot !</div>
+
+      <div class="dashboard-stats">
+        <div class="stat-item">
+          <div class="stat-val" id="dashBest">0m</div>
+          <div class="stat-lbl">Best Distance</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val" id="dashLast">0m</div>
+          <div class="stat-lbl">Last Flight</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val" id="dashFlights">0</div>
+          <div class="stat-lbl">Total Flights</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val" id="dashUnlocked">1 / 3</div>
+          <div class="stat-lbl">Colors Unlocked</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val" id="dashGarden">0</div>
+          <div class="stat-lbl">Sunflowers Grown</div>
+        </div>
+      </div>
+
+      <div id="unlockProgressWrap">
+        <div id="unlockProgressLabel">All Gradients unlocked!</div>
+        <div class="progress-track"><div class="progress-fill" id="unlockProgressFill" style="width:0%;"></div></div>
+      </div>
+
+      <div class="section-title">Select Airplane Color</div>
+      <div id="lockMsg"></div>
+      <div class="custom-grid" id="colorPickerGrid">
+        <div class="color-btn selected" data-color="white">Classic White</div>
+        <div class="color-btn locked" data-color="sunset" id="btnSunset">Sunset Gradient (1,000m)</div>
+        <div class="color-btn locked" data-color="aurora" id="btnAurora">Aurora Gradient (5,000m)</div>
+      </div>
+
+      <div class="section-title">Manual 📜</div>
+      <p>• <strong>Controls ~</strong> W/A/S/D Or Arrow keys. Press <strong>G</strong> for a 360° rotation.</p>
+      <p>• <strong>Moisture Gradient ~</strong> Flight altitude capped at <i>35 m</i>.</p>
+      <p>• <strong>Wind System ~</strong> Steer with shifting wind for speed boosts!</p>
+      <p><u>PAPER AIRPLANE HAS SEEDS SO WHEN IT CRASHES A SUNFLOWER BLOOMS</u></p>
+      <p><u>PAPER AIRPLANE TRANSFORMS TO PAPER BOAT IN PONDS</u></p>
+
+      <div class="keys">
+        <div class="key">W</div><div class="key">A</div><div class="key">S</div><div class="key">D</div>
+        <div class="key">G</div><div class="key">↑</div><div class="key">←</div><div class="key">↓</div><div class="key">→</div>
+      </div>
+
+      <button id="startBtn">Take Off</button>
+    </div>
+  </div>
+
+  <!-- CRASH SCREEN -->
+  <div id="crashScreen">
+    <div class="panel" style="text-align:center;">
+      <h2>THE FIELD REMEMBERS</h2>
+      <p id="finalDistance">You flew 0 meters.</p>
+      <button id="retryBtn">Fly again ▶</button>
+      <button id="dashboardBtn" class="btn-secondary">Dashboard ↩</button>
+    </div>
+  </div>
+
+  <!-- GAME HUD -->
+  <div id="hud">
+    <div id="topbar">
+      <div id="logo">AEROX ©</div>
+      <div style="display:flex; flex-direction:column; align-items:flex-end;">
+        <button id="audioBtn" title="Audio Toggles">⚙ Audio</button>
+        <div id="audioControls">
+          <div class="audio-row">Guide <button id="toggleGuide" class="audio-btn-toggle active">ON</button></div>
+          <div class="audio-row">Music <button id="toggleMusic" class="audio-btn-toggle active">ON</button></div>
+        </div>
+      </div>
+      <div id="score">
+        <div id="distance">0<span>m</span></div>
+        <div id="zone">Altitude: <span id="altMeter">5.0</span>m</div>
+      </div>
+    </div>
+    <div id="status" aria-live="polite"></div>
+
+    <div id="windBox">
+      <div id="windTitle">WIND</div>
+      <div id="windArrow">↑</div>
+      <div id="windSpeed">0 km/h</div>
+    </div>
+  </div>
+</div>
+
+<!-- GAME LOGIC SCRIPT -->
+<script src="aerox-logics.js" defer></script>
+
+<!-- LANDING PAGE TO GAME LAUNCH CONTROLLER -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const landingView = document.getElementById('landingView');
+  const gameModal = document.getElementById('gameContainerModal');
+  const exitBtn = document.getElementById('exitGameBtn');
+
+  function openGame() {
+    landingView.style.display = 'none';
+    gameModal.classList.add('active');
+    document.body.classList.add('game-active');
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    gameModal.scrollTop = 0;
+    // Ensure WebGL renderer resizes properly
+    window.dispatchEvent(new Event('resize'));
+  }
+
+  function closeGame() {
+    gameModal.classList.remove('active');
+    document.body.classList.remove('game-active');
+    landingView.style.display = 'block';
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    window.dispatchEvent(new Event('resize'));
+  }
+
+  document.getElementById('heroPlayBtn').addEventListener('click', openGame);
+  document.getElementById('heroPlayBtnNav').addEventListener('click', openGame);
+  document.getElementById('cardPlayBtn').addEventListener('click', openGame);
+  exitBtn.addEventListener('click', closeGame);
+
+  // Logo returns to top of landing page
+  document.getElementById('navLogo').addEventListener('click', (e) => {
+    e.preventDefault();
+    if (gameModal.classList.contains('active')) {
+      closeGame();
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>

@@ -187,9 +187,8 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.35; 
-renderer.outputEncoding = THREE.sRGBEncoding;
-
-document.body.appendChild(renderer.domElement);
+const container = document.getElementById('gameContainerModal') || document.body;
+container.appendChild(renderer.domElement);
 
 window.addEventListener('resize', ()=>{
   camera.aspect = window.innerWidth/window.innerHeight;

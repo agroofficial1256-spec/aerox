@@ -1,0 +1,16 @@
+{
+  "name": "AEROX — 3D Paper Airplane Flight Simulator",
+  "short_name": "AEROX",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#121c27",
+  "theme_color": "#121c27",
+  "description": "A serene 3D paper airplane flight simulator where every crash plants a sunflower in a living world.",
+  "icons": [
+    {
+      "src": "aerox-hero-banner.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
